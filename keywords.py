@@ -68,7 +68,9 @@ def test(test):
 	server.login("sukhad.anand@gmail.com", "desertstorm")
 	dataset=loadcsv("testit.csv")
 	bloblist = seperateByClass(dataset)
+	l=len(bloblist)
 	fre={}
+	c=0
 	for i, blob in enumerate(bloblist):
 	    print("Top words in document {}".format(i + 1))
 	    scores = {word: tfidf(word, blob, bloblist) for word in blob.words}
@@ -78,10 +80,10 @@ def test(test):
 	        	fre[word]=1
 	        else:
 	        	fre[word]=fre[word]+1
-	for value in fre :
-		if(fre[word]>0):
-			msg = test
-			server.sendmail("sukhad.anand@gmail.com", "kohlishivam5522@gmail.com", msg)
-			server.quit()
-test("roadblock everywhere it is so frustrating")
+	        if(fre[word]>len(bloblist)/2 and i==l-1 and c==0):
+	        	c=1
+	        	msg = test
+	        	server.sendmail("sukhad.anand@gmail.com", "kohlishivam5522@gmail.com", msg)
+	        	server.quit()    
+test("it is amazing")
 

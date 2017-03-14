@@ -1,5 +1,5 @@
 import math
-import textblob as tb
+from textblob import TextBlob as tb
 import csv
 import bs4
 import requests
@@ -18,7 +18,10 @@ def n_containing(word, bloblist):
     return sum(1 for blob in bloblist if word in blob)
 
 def idf(word, bloblist):
-    return math.log(len(bloblist) / (1 + n_containing(word, bloblist)))
+	w=len(bloblist) / (1 + n_containing(word, bloblist))
+	if (w<=0):
+		w=1
+	return math.log(w)
 
 def tfidf(word, blob, bloblist):
     return tf(word, blob) * idf(word, bloblist)
@@ -34,7 +37,8 @@ def seperateByClass(dataset):
 	seperated=[]
 	for i in range(len(dataset)):
 		vector=dataset[i]
-		vector[0]=tb(vector[0])
+		a=vector[0]
+		vector[0]=tb(a)
 		seperated.append(vector[0])
 	return seperated
 
@@ -61,8 +65,8 @@ def test(test):
 	csvAdd(dict_data,columns)
 	server = smtplib.SMTP('smtp.gmail.com', 587)
 	server.starttls()
-	server.login("kohlishivam5522@gmail.com", "businessman")
-
+	server.login("sukhad.anand@gmail.com", "desertstorm")
+	dataset=loadcsv("testit.csv")
 	bloblist = seperateByClass(dataset)
 	fre={}
 	for i, blob in enumerate(bloblist):
@@ -77,7 +81,7 @@ def test(test):
 	for value in fre :
 		if(fre[word]>0):
 			msg = test
-			server.sendmail("kohlishivam5522@gmail.com", "kohlishivam5522@gmail.com", msg)
+			server.sendmail("sukhad.anand@gmail.com", "kohlishivam5522@gmail.com", msg)
 			server.quit()
-test("roadblock")
+test("roadblock everywhere it is so frustrating")
 
